@@ -43,7 +43,7 @@ Object Array Function Date Math RegExp
 ### 不同点
 
 - 数组可用 `for...in` 和 `for` 循环遍历
-- 类数组只可以用 `for` 遍历（因为类型是 Object
+- 类数组只可以用 `for` 遍历（因为类型是 Object）
 
 ## 类型转换
 
@@ -98,6 +98,11 @@ console.log((new Date(2010, 0, 1)).toString()); // Fri Jan 01 2010 00:00:00 GMT+
 
 ## 相等比较
 
+```
+[] == ![] //true
+{} == !{} // false
+```
+
 ## typeof属性
 
 typeof NaN; //"number"
@@ -123,17 +128,17 @@ typeof NaN; //"number"
 
 ### 数组拷贝的方法
 
-concat：`[1, 2, 3].concat()` 浅拷贝
+    concat：`[1, 2, 3].concat()` 浅拷贝
 
-slice：`fn1 = fn.slice()` 浅拷贝
+    slice：`fn1 = fn.slice()` 浅拷贝
 
-map：`fn1 = fn.map((x) => x)` 浅拷贝
+    map：`fn1 = fn.map((x) => x)` 浅拷贝
 
-filter：`fn1 = fn.filter(() => true)` 浅拷贝
+    filter：`fn1 = fn.filter(() => true)` 浅拷贝
 
-assign：`fn1 = Object.assign({}, fn)` 浅拷贝
+    assign：`fn1 = Object.assign({}, fn)` 浅拷贝
 
-扩展运算符：`fn1 = [...fn]` 浅拷贝
+    扩展运算符：`fn1 = [...fn]` 浅拷贝
 
 #### 用 assign 方法深拷贝
 
@@ -146,7 +151,7 @@ function clone(origin) {
 
 ## 原型与原型链
 
-在 JS 里我们用构造函数创建对象，每一个对象创建后就会自动关联一个对象，这个对象就是我们所说的原型，当我们访问所创建的对象时，如果它内部没有我们需要的属性，就会到它的原型对象里寻找这个属性，像这样一直上溯，就是我们所说的原型链。我们利用`_proto_`上溯原型链。ES6 之前 JS 就是通过原型链实现“继承”的。
+在 JS 里我们用构造函数创建对象，每一个对象创建后就会自动关联一个对象，这个对象就是我们所说的原型，当我们访问所创建的对象时，如果它内部没有我们需要的属性，就会到它的原型对象里寻找这个属性，像这样一直上溯，就是我们所说的原型链，可以利用`_proto_`上溯原型链。ES6 之前 JS 就是通过原型链实现“继承”的
 
 ![冯羽老师的原型链示意图](https://github.com/mqyqingfeng/Blog/raw/master/Images/prototype5.png)
 
@@ -172,7 +177,7 @@ function clone(origin) {
 
 Asynchronous JavaScript + XML（异步JavaScript和XML）
 
-原理：利用 XMLHttpRequest 向服务器发送异步请求，并将服务器返回的数据交还给客户端处理，利用 JS 的 DOM 操作去更新页面，在form表单提交的时候，可实现页面不刷新。缺点是没有history(-1)。
+原理：利用 XMLHttpRequest 向服务器发送异步请求，并将服务器返回的数据交还给客户端处理，利用 JS 的 DOM 操作去更新页面，在form表单提交的时候，可实现页面不刷新，缺点是没有history(-1)
 
 JSON 和 XML 都用于在 Ajax 模型中打包信息，由于 JSON 更加轻量而且是 JavaScript 的一部分，目前 JSON 的使用比 XML 更普遍
 
@@ -192,18 +197,6 @@ JSON 和 XML 都用于在 Ajax 模型中打包信息，由于 JSON 更加轻量�
 
 ### co 库的 generator 函数 
 
-## call，apply，bind
-
-### 相同点
-
-都是用来改变 this 的指向
-
-### 不同点
-
-- call 和 apply 改变了 this 指向后返回执行结果，而 bind 是返回新的函数，需要调用
-- call 与 apply 主要是传参不同
-   `fn.call(obj, arg1, arg2...);`
-   `fn.apply(obj,[arg1, arg2...]);`
 
 ## 函数式编程
 
@@ -220,9 +213,19 @@ JSON 和 XML 都用于在 Ajax 模型中打包信息，由于 JSON 更加轻量�
 只传递给函数一部分参数来调用它，让它返回一个函数去处理剩下的参数。
 
 用途：
+
 1.延迟计算；
 2.参数复用；
 3.动态生成函数
+
+```
+function add(num1, num2){
+    return num1 + num2;
+}
+
+var curriedAdd = curry(add, 5);
+alert(curriedAdd(3))  //8
+```
 
 ## 事件循环机制
 
@@ -237,15 +240,15 @@ JSON 和 XML 都用于在 Ajax 模型中打包信息，由于 JSON 更加轻量�
 
 ### 事件委托
 
-利用事件冒泡，只指定一个事件处理程序管理某一类型的所有事件。
+利用事件冒泡，只指定一个事件处理程序管理某一类型的所有事件
 
 ## 内存泄露 memory leak
 
-内存泄漏：不再使用的内存没有及时释放或者不能释放。
+内存泄漏：不再使用的内存没有及时释放或者不能释放
 
-JS 的垃圾回收机制有引用计数的方法，如果存在有两个对象循环引用的情况，就会发生内存泄漏。
+JS 的垃圾回收机制有引用计数的方法，如果存在有两个对象循环引用的情况，就会发生内存泄漏
 
-如果连续五次垃圾回收后，内存占用一次比一次大，就存在内存占用。如果内存占用基本平稳，就说明不存在内存占用。
+如果连续五次垃圾回收后，内存占用一次比一次大，就存在内存占用。如果内存占用基本平稳，就说明不存在内存占用
 
 [JS内存泄漏排查方法](https://cloud.tencent.com/developer/article/1444558)
 
@@ -310,7 +313,48 @@ var throttle = function(delay, cb) {
 
 ## 图片懒加载
 
-懒加载也叫延迟加载，指的是在长网页中延迟加载图片的时机，当用户需要访问时，再去加载。
+懒加载也叫延迟加载，指的是在长网页中延迟加载图片的时机，当用户需要访问时，再去加载
 
 实现原理是，将页面上的图片的 src 属性设置为空字符串，将图片的真实路径保存在一个自定义属性中，当页面滚动的时候，进行判断，如果图片进入页面可视区域内，则从自定义属性中取出真实路径赋值给图片的 src 属性，以此来实现图片的延迟加载。
+
+## 求dom元素下所有dom元素个数
+
+document.getElementsByTagName('*').length 
+
+## 0.1+0.2 !=== 0.3
+
+因为 js 使用的双精度浮点，所以在计算机内部存储数据的编码会出现误差，导致0.1+0.2=0.30000000000000004。和0.3相比较结果为false
+
+最好的方法是设置一个误差范围值，通常称为”机器精度“，而对于Javascript来说，这个值通常是2^-52,而在ES6中,
+已经为我们提供了这样一个属性：Number.EPSILON，而这个值正等于2^-52
+
+1. 将其先转换成整数，再相加之后转回小数。具体做法为先乘10相加后除以10.如下图
+```
+ let x=(0.1*10+0.2*10)/10;
+ console.log(x===0.3)
+```
+
+2. 使用 number 对象的 toFixed 方法，toFixed 方法可以指定运算结果的小数点后的指定位数的数字，使保留一位小数就是 toFixed(1)。
+```
+//let x=(0.1+0.2).toFixed(1)
+//因为使用 toFixed 方法将 number 类型转换成了字符串类型
+//，所以使用 parseFloat 将字符串转回 number 类型
+let x=parseFloat((0.1+0.2).toFixed(1));
+console.log(x===0.3);
+```
+
+3. 使用 ES6 新增的 Number.EPSILON 方法，这个方法表示 js 的最小精度，使用这个方法通常只是对 0.1+0.2 是否等于 0.3 做判断，并不像前两种改变 0.1+0.2 的值
+```
+function equal(a, b) {
+ 	return Math.abs(a - b) < (Number.EPSILON ? Number.EPSILON : Math.pow(2, -52));
+           //此处使用了三目运算符对IE进行兼容，也可以使用if(Number.EPSILON)进行兼容判断。
+}
+/*不考虑兼容
+function equal(a,b){
+   return Math.abs(a-b)<Number.EPSILON;
+   //相当于把比较的boolean值返回
+}
+*/
+console.log(equal(0.1 + 0.2, 0.3))
+```
 
