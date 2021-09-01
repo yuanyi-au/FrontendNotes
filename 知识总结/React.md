@@ -53,7 +53,7 @@ npx 的原理是运行时到 node_modules/.bin 路径和环境变量$PATH里检�
 
 ## JSX
 
-JavaScript XML 类似于 XML 的JS 拓展语法
+JavaScript XML 类似于 XML 的 JS 拓展语法
 
 本质：以 React.createElement 的形式实现，并没有直接把 HTML 代码渲染到页面上
 
