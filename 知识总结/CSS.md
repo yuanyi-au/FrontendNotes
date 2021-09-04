@@ -45,6 +45,10 @@ width，height 只包含 content，不包含 border 和 padding
 
 - inherit 从父元素继承
 
+## 浏览器的默认布局
+
+默认为流动布局，包括块布局和内联布局
+
 ## flex 与 grid 布局
 
 flex 依靠轴线布局，可以看作是一维布局，grid 是将容器划分为行和列依靠单元格布局，可以看作是二维布局
@@ -102,7 +106,12 @@ flex 依靠轴线布局，可以看作是一维布局，grid 是将容器划分�
 
 ## CSS 选择器
 
-优先级别：!important > 行内样式 > ID选择器 > 类选择器 = 伪类 = 属性 > 标签 = 伪元素 > 通配符 > 继承 > 浏览器默认属性
+优先级别：!important > 行内样式 > ID 选择器 > 类选择器 = 伪类 = 属性 > 标签 = 伪元素 > 通配符 > 继承 > 浏览器默认属性
+
+### 选择器命名规则
+
+- ID 选择器以 # 开头
+- 类选择器以 . 开头
 
 ## 伪元素 与 伪类
 
@@ -123,7 +132,18 @@ elem:nth-child | elem:nth-of-type | :not(elem)
 - 表单状态
 :enabled | :disabled | :checked
 
-## BFC 规范
+## 常见的继承属性
+
+- 字体 font 系列
+- 文本 text-align text-ident line-height letter-spacing
+- 颜色 color
+- 列表 list-style
+- 可见性 visibility
+- 光标 cursor
+
+非继承属性：opacity，background
+
+## BFC 
 
 block formatting context 块级格式化上下文
 
@@ -131,8 +151,9 @@ BFC 相当于一个独立的容器，内部元素的布局和外部互不影响�
 
 ### 创建 BFC
 
-- 根元素 html 本身就是一个 BFC 区域
-- 浮动定位和绝对定位
+- 根元素 <html> 本身就是一个 BFC 区域
+- position:absolute 和 position:fixed
+- display: flow-root
 - display: inline-block
 - display: flex
 - overflow: hidden
@@ -160,6 +181,24 @@ BFC 相当于一个独立的容器，内部元素的布局和外部互不影响�
 opacity 作用于元素，以及元素内的所有内容的透明度，rgba()只作用于元素的颜色或其背景色
 
 设置rgba透明的元素的子元素不会继承透明效果
+
+## 重置元素的属性值到初始值
+
+- initial：将属性设为W3C规范初始值
+- all：将元素的所有属性重置
+
+## 外边距折叠
+
+相邻块盒子的上下边距没有累加，而是重叠取其中最大值的现象
+
+避免外边距重叠的方法：
+
+- 设置边框
+- 设置内边距
+- 增加内容，直接写入或使用伪元素
+- 触发 BFC 块级格式上下文的方法都可以
+
+
 
 # 各种实现方法
 
