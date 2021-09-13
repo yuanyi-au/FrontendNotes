@@ -115,7 +115,22 @@ webpack 只能理解 JavaScript 和 JSON 文件，loader 可以用来转换不�
 
 plugins 用来解决 loader 没能解决的事，比如打包优化，资源管理，注入环境变量
 
+#### loader 和 plugin 的区别
+
+- loader
+  - 在打包前或期间调用
+  - 根据不同匹配条件处理资源
+  - 调用顺序与书写顺序相反
+  - 写在前面的接收写在后面的返回值作为输入值
+
+- plugin
+  - 基于 Tapable 实现
+  - 事件触发调用，监听 webpack 广播的事件
+  - 不同生命周期改变输出结果
+
+
 ### 模块热替换 HMR
+
 
 ###
 
@@ -124,5 +139,14 @@ webpack --config：打包，在配置文件中指定 entry 和 output，指定�
 webpack --watch：监听文件变化，发现修改后重新编译
 
 webpack-dev-server：改变开发服务器的行为，可以提供本地服务
+
+
+### 如何自定义一个 webpack 插件
+
+- 声明一个自定义命名的类或函数
+- 在原型中新增 apply 方法
+- 声明由 Compiler 模块暴露的生命周期函数
+- 使用 webpack 提供的 API 或 自行处理内部实例的数据
+- 处理完成后，调用 webpack 提供的回调函数
 
 

@@ -50,34 +50,58 @@ bind() 返回的是函数
 ### 手写 bind()
 
 ```
-Function.prototype.bind = function (...arg1) {
-  //保存this，这里的this指的是test方法
-  let self = this;
-  //取出第一个参数，也就是this的指向对象
-  let obj = arg1[0];
-  if (typeof obj === "object") {
-    obj = obj || window; //  obj 如果是null就会赋值为window
-  } else {
-    obj = Object.create(null);
-  }
-  //剩余参数保存起来
-  let params1 = arg1.slice(1);
-  //返回一个待执行的函数
-  return function (...arg2) {
-    //和第一个参数合并为完整的参数
-    let params2 = params1.concat(arg2);
-    //调用apply方法进行this转换
-    return self.apply(obj, params2);
-  };
-};
-var test = function (a, b, c) {
-  console.log("x=" + this.x, "a=" + a, "b=" + b, "c=" + c);
-};
-var o = {
-  x: 1,
-};
-test.bind(o, 1)(2, 3); //x=1 a=1 b=2 c=3
+Function.prototype.myBind = function(_this, ...args) {
+	const fn = this
+	return function F(...args2) {
+		return this instanceof F ? new fn(...args, ...args2)
+		: fn.apply(_this, args.concat(args2))
+	}
+}
+//使用
+function Sum (a, b) {
+	this.v= (this.v || 0)+ a + b
+	returnthis
+}
+const NewSum = Sum.myBind({v: 1}, 2)
+NewSum(3) // 调用：{v: 6}
+new NewSum(3) // 构造函数：{v: 5} 忽略 myBind 绑定this
 ```
+
+### 手写 call
+
+```
+Function.prototype.myCall = function(_this, ...args) {
+	if (!_this) _this = Object.create(null)
+	_this.fn = this
+	const res = _this.fn(...args)
+	delete _this.fn
+	return res
+}
+// 使用
+function sum (a, b) {
+	return this.v + a + b
+}
+sum.myCall({v: 1}, 2, 3) // 6
+```
+
+
+### 手写 apply
+
+```
+Function.prototype.myApply = function(_this, args = []) {
+	if (!_this) _this = Object.create(null)
+	_this.fn =this
+	const res = _this.fn(...args)
+	delete _this.fn
+	return res
+}
+// 使用
+function sum (a, b) {
+	return this.v + a + b
+}
+sum.myApply({v: 1}, [2, 3]) // 6
+```
+
 
 ## Promise
 
@@ -117,12 +141,31 @@ Promise有三种状态：pending（进行中），fulfilled（已成功），rej
 
 不想区分是同步操作还是异步操作的时候，用 then 指定下一步流程，用 catch 处理抛出的错误
 
-### 链式调用
+### 如何终止Promise
+
+- Promises / A+ 标准
+  - 原 Promise 对象的状态与新对象保持一致
+  - 返回一个pending状态的 Promise 对象，后续的函数都不会调用
+
+- Promise.race 竞速
+  - 其中一个 Promise 先到达resolve状态，其他 Promise 不会执行
+
+- 抛出错误
+  - 其中一个 Promise 抛出一个错误后，错误信息将沿着 链路 向后传递，直至被捕获
+  - 错误被捕获前的函数不会被调用
+  
+### 手写 Promise
+
+```
+
+```
+
+## 链式调用
 
 连续执行多个异步操作，在上一个操作执行成功后开始执行下一个操作
 Promise 链 then() 函数
 
-### ES6的class与ES5的继承的区别
+## ES6的class与ES5的继承的区别
 
 ES5继承：
 
@@ -135,10 +178,71 @@ ES6继承：
 
 实质：利用extend关键字继承父类，然后继承父类的属性和方法
 
-### 继承
-
-原型链 | 借用构造函数 | 组合继承 | 寄生式继承 | 寄生组合式继承
-
 ### Array.from()
 
 从一个类似数组或可迭代对象创建一个新的，浅拷贝的数组实例。
+
+
+### 对比 import、import() 和 requrie
+
+-|import|import()|require
+-|-|-|-
+规范|ES6Module|ES6Module|CommonJS
+执行阶段|静态 编译阶段|动态 执行阶段|动态 执行阶段
+顺序|置顶最先|异步|同步
+缓存|√|√|√|
+默认导出|default|default|直接赋值
+导入赋值|解构赋值，传递引用|在then方法中解构赋值，属性值是仅可读，不可修改|	基础类型 赋值，引用类型：浅拷贝
+
+
+
+### ES6、ES7、ES8、ES9、ES10 新特性
+
+#### ES6
+
+let 和 const
+Promise
+Class
+箭头函数
+函数参数默认值
+模版字符串
+解构赋值
+展开语法
+对象属性缩写
+模块化
+
+#### ES7
+
+includes()
+指数操作符**
+
+#### ES8
+
+async/await
+Object.values()
+Object.entries()
+Object.getOwnPropertyDescriptors()
+填充字符串到指定长度：padStart、padEnd
+
+#### ES9
+
+异步迭代：for await (let i of array)
+Promise.finally()
+
+#### ES10
+
+flat 和 flatMap
+trimStart 和 trimEnd 去除字符串首尾空白字符
+Object.fromEntries()传入键值对列表，返回键值对对象
+Symbol.prototype.description
+String.prototype.matchAll 返回包含所有匹配正则表达式和分组捕获结果的迭代器
+Function.prototype.toString() 返回精确字符，包括空格和注释
+新基本数据类型 BigInt
+globalThis
+import()
+
+#### ES11+
+
+String.prototype.replaceAll
+Promise.any
+WeakRefs （WeakMap、WeakSet）

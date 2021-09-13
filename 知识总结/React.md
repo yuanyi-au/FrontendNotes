@@ -88,27 +88,35 @@ diff 算法通过 key 来识别哪些元素发生了变化
 
 1. Mounting 挂载
 
-constructor()：React 数据的初始化
+- constructor 数据初始化
 
-componentWillMount()
+- getDerivedStateFromProps
 
-render()
+- render
 
-componentDidMount()
+- React 更新 DOM 和 refs
+
+- componentDidMount
 
 2. Updating 更新
 
-componentWillReceiveProps()
+- props 变化 → getDerivedStateFromProps
 
-shouldComponentUpdate()：可以用于性能优化，返回 false 则不会重新渲染
+- setState() → getDerivedStateFromProps → shouldComponentUpdate 可用于性能优化，返回 false 则不会重新渲染
 
-componentWillUpdate()
+- forceUpdate() → getDerivedStateFromProps
 
-render()
+- render
+
+- getSnapshotBeforeUpdate
+
+- React 更新 DOM 和 refs
+
+- componentDidUpate
 
 3. Unmounting 卸载
 
-componentWillUnmount()
+- componentWillUnmount
 
 ## 组件
 
@@ -137,6 +145,19 @@ componentWillUnmount()
 ### useEffect()
 
 useEffect() 是通用的副效应钩子，作用是指定一个函数（要实现的副效应），组件每次渲染后该函数都自动执行一次
+
+```
+//移除订阅
+function component(props) {
+	function handleStatusChange(status) { console.log(status.isOnine) }
+	useEffect(() => {
+		API.subscribe(props.id, handleStatusChange))
+	}
+	return function cleanup() {
+		API.unsubscribe(props.id, handleStatusChange)
+	}
+}
+```
 
 #### 参数
 
@@ -196,6 +217,46 @@ useEffect() 允许返回一个函数，用于在组件卸载时清除副效应
 - 自身抛出的错误（不是子组件）
 
 任何未被错误边界捕获的错误将会导致整个组件树被卸载
+
+## React 中有哪几种类型的组件
+
+- 无状态组件
+  - 更适合函数组件
+  - 负责展示
+  - 无状态，复用度高
+
+- 有状态组件
+  - 函数组件 + hooks 或 类组件
+  - useState 或 声明 state
+  - useEffect 或 使用生命周期
+
+- 容器组件
+  - 子组件状态提升到此，统一管理
+  - 异步操作，如数据请求等
+  - 提高子组件的复用度
+
+- 高阶组件
+  - 接收组件，返回组件
+  - 为原有组件增加新功能和行为
+  - 代替 mixins，避免状态污染
+
+- 回调组件
+  - 高阶组件的另一种形式
+  - 将组件本身，通过 props.children 或 prop 属性 传递给子组件
+  - 适合不能确定或不关心传给子组件数据的场景，如路由，加载组件的实现
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## react-router-dom
 

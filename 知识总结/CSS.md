@@ -41,7 +41,7 @@ width，height 只包含 content，不包含 border 和 padding
 
 - static 默认值，元素出现在正常的流中，此时 top/right/bottom/left/z-index 无效
 
-- sticky 依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换
+- sticky 依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换（滚动最近overflow不为visible父元素，未被卷曲时表现为未创建BFC的相对定位，将被卷曲时表现为绝对定位）
 
 - inherit 从父元素继承
 
@@ -198,6 +198,99 @@ opacity 作用于元素，以及元素内的所有内容的透明度，rgba()只
 - 增加内容，直接写入或使用伪元素
 - 触发 BFC 块级格式上下文的方法都可以
 
+## CSS 加载方式
+
+- style属性（内联样式）：定义的属性优先级高于所有选择器和其它加载方式
+
+- <style></style>标签（嵌入样式）：只对当前页面有效
+
+- <link>（外链样式）：CSS 和 HTML 分离，便于复用和维护
+
+- @import（导入样式）：模块化，需先下载并解析引用 CSS，才可以继续下载导入 CSS，现代通常使用模块化工具在编译时合并 CSS
+
+## CSS 加载与页面渲染
+
+CSS 加载不阻碍 DOM 树的加载。但 CSS 会被转为 CSS 树进而与 DOM 树结合成 Render 树等待渲染，如果它加载得很慢会影响后续渲染。
+
+通过媒体查询，可以设置link引用的 CSS 不阻塞渲染，但仍会下载。
+
+通常情况下，CSS和不依赖 DOM 的JS放</head>标签前，依赖 DOM 的JS放在</body>标签前。
+
+![](https://pic.leetcode-cn.com/1617075837-kYpSTD-image.png)
+
+## 重排与重绘
+
+渲染主要分为三个步骤：
+
+- 布局：计算盒模型的位置，大小
+- 绘制：填充盒模型的文字、颜色、图像、边框和阴影等可视效果
+- 合并：所有图层绘制后，按层叠顺序合并为一个图层
+
+重新渲染一般有三种执行路径：
+
+- 重排：布局 → 绘制 → 合并
+- 重绘：绘制 → 合并
+- 合并
+
+
+### 重排
+
+引起重排的属性，即布局类属性，包括：
+display padding margin width height min-height max-height border border-width 
+position top bottom left right float clear
+font-family font-size font-weight line-height text-align vertical-align white-space overflow overflow-y
+
+### 重绘
+
+引起重绘的属性，即绘制类属性，包括：
+
+color 	visibility 	text-decoration 	box-shadow
+border-color border-style border-radius
+background background-image background-position background-repeat background-size 
+outline outline-color outline-style outline-width
+
+## 隐藏元素
+
+- display: none 不占位
+- visibility: hidden 占位
+- opacity: 0 占位
+
+## 重置浏览器默认样式 Reset.css 和 Normalize.css
+
+共同点：
+- 两者都能抹平浏览器间的默认样式差异
+- 都部分重置了浏览器默认样式，尤其是内外边距属性
+
+不同点：
+- Reset.css让元素在不同浏览器样式完全一样
+- Normalize.css适当保留部分浏览器默认样式，只重置影响开发的样式，此外
+- Normalize.css修复了表单、SVG溢出等BUG
+- Normalize.css适当提高了可用性
+- Normalize.css避免大量使用群组选择器，通过注释提高调试体验
+
+## SaSS
+
+- 变量：支持$标识符变量，使用#{}插值
+- 嵌套：SCSS 支持{ }大括号嵌套 SASS 支持缩进嵌套
+- 扩展 / 继承 / 运算符 / @import：支持
+- 流程：支持if else条件判断，支持for while each循环
+- 映射：支持$()声明 Map，提供map-get(map, key) map-keys(map) map-values(map)等一系列方法操作 Map，支持遍历 Map
+- 特有：支持 compass ，内含 自动私有前缀 等一系列有用SASS模块，支持压缩输出
+
+### Webpack 处理 SASS 文件
+
+- sass-loader
+    - 将 SASS / SCSS 文件编译成 CSS
+    - 调用node-sass，支持options选项向node-sass传参
+
+- css-loader
+    - 支持读取 CSS 文件，在 JS 中将 CSS 作为模块导入
+    - 支持 CSS 模块 @规则@import @import url()
+
+- style-loader
+    - 将 CSS 以<style>标签的方式，插入 DOM
+
+Webpack中 loader 的加载顺序是从后往前
 
 
 # 各种实现方法
@@ -207,18 +300,15 @@ opacity 作用于元素，以及元素内的所有内容的透明度，rgba()只
 - 行内元素，设置父元素 text-align: center
 - 元素宽度固定，设置左右 margin 为 auto
 - 元素宽度固定，使用绝对定位，设置元素 margin-left 为其宽度的一半；
-- 元素为绝对定位，设置父元素 position 为 relative ，元素 left:0; right:0; margin:auto;
+- position:relative/position:absolute/position:fixed/position:sticky 脱离文档流后，left:0; right:0; margin:0 auto; 宽度固定
 - flex布局，justify-content: center
 
 ## 垂直居中
 
-- 绝对定位，bottom:0; top:0; margin:auto
-- 绝对定位，top:50%，margin-top 为高度一半的负值
+- position:relative/position:absolute/position:fixed/position:sticky 脱离文档流后，bottom:0; top:0; margin:auto 0；或者 top:50%，margin-top 为高度一半的负值
 - flex布局，align-item: center
 
 ## 多列等高
-
-- flex
 
 ```
 height: 100px;
@@ -226,8 +316,6 @@ align-items: stretch;
 ```
 
 ## 两栏布局
-
-### flex
 
 ```
 .left {
@@ -240,8 +328,6 @@ align-items: stretch;
 
 ## 三栏布局
 
-### flex
-
 ```
 .left {
   flex: 0 0 200px;
@@ -251,6 +337,58 @@ align-items: stretch;
 }
 .center {
   flex: auto
+}
+```
+
+## 瀑布流布局
+
+```
+.content {
+    column-count: 3;
+    column-gap: 5px;
+  }
+  .content > div {
+    margin-bottom: 5px;
+    break-inside: avoid; //避免元素在分栏时中断
+    color: white;
+  }
+  
+/** 弹性布局 **/
+.content {
+  display: flex;
+}
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-right: 5px;
+}
+```
+
+## 品布局
+
+第一行横跨两列，第二行分两栏
+
+```
+/** 弹性布局 **/
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex div:first-child {
+  width: 100%;
+}
+.flex div:first-child ~ div {
+  width: 50%;
+}
+
+/** 网格布局 **/
+.grid {
+  display: grid;
+}
+.grid div:first-child {
+  grid-column-start: 1;
+  grid-column-end: 3;
 }
 ```
 
