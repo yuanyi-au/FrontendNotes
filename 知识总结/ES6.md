@@ -9,6 +9,10 @@
 - const 有块级作用域，不支持变量提升，不允许重复声明，有暂时性死区
 - const 声明的变量的内存地址不能变动，改变会报错，值可以改变
 
+- let 的「创建」过程被提升了，但是初始化没有提升
+- var 的「创建」和「初始化」都被提升了
+- function 的「创建」「初始化」和「赋值」都被提升了
+
 ### TDZ 暂时性死区
 
 const 与 let 在声明前使用会报错，它只能在绑定的块级作用域内使用
@@ -157,7 +161,41 @@ Promise有三种状态：pending（进行中），fulfilled（已成功），rej
 ### 手写 Promise
 
 ```
-
+const PENDING = 'pending'
+const RESOLVED = 'resolved'
+const REJECTED = 'rejected'
+function Promise(callback) {
+  this.state = PENDING
+  this.value = null
+  this.resolvedCallbacks = []
+  this.rejectedCallbacks = []
+  
+  callback(value => {
+    if (this.state === PENDING) {
+      this.state = RESOLVED
+      this.value = value
+      this.resolvedCallbacks.map(callback => callback(value))
+    }
+  }, value => {
+    if (this.state === PENDING) {
+      this.state = REJECTED
+      this.value = value
+      this.rejectedCallbacks.map(callback => callback(value))
+    }
+  })
+}
+Promise.prototype.then = function (onFulfilled = () => {}, onRejected = () => {}) {
+  if (this.state === PENDING) {
+    this.resolvedCallbacks.push(onFulfilled)
+    this.rejectedCallbacks.push(onRejected)
+  }
+  if (this.state === RESOLVED) {
+    onFulfilled(this.value)
+  }
+  if (this.state === REJECTED) {
+    onRejected(this.value)
+  }
+}
 ```
 
 ## 链式调用

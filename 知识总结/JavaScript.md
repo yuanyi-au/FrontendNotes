@@ -281,6 +281,65 @@ JS 的垃圾回收机制有引用计数的方法，如果存在有两个对象�
 可以从一开始就声明需要手动清除的引用，ES6 中引入 WeakSet 和 WeakMap，它们对值的引用不计入垃圾回收机制
 
 [JavaScript 内存泄漏教程](http://www.ruanyifeng.com/blog/2017/04/memory-leak.html)
+
+## 数组去重
+
+```
+//Set去重
+function unique (arr) {
+	return Array.from(new Set(arr))
+}
+
+//Set + 扩展运算符
+function unique (arr) {
+	return [...new Set(arr)]
+}
+
+//for 循环 + splice
+function unique (arr) {
+	for (let i = 0; i < arr.length; i++) {
+		for (let j = i + 1; j < arr.length; j++) {
+			if (arr[i] === arr[j]) {
+				arr.splice(j, 1)
+				j--
+			}
+		}
+	}
+	return arr
+}
+
+//sort + splice
+function unique (arr) {
+	arr.sort()
+	for (let i = 0; i < arr.length - 1; i++) {
+		if (arr[i] === arr[i + 1]) {
+			arr.splice(i, 1)
+			i--
+		}
+	}
+	return arr
+}
+```
+
+## 判断一个对象是不是数组 Array
+
+- isPrototypeOf
+```
+ function isArray(o) {
+	return Array.prototype.isPrototypeOf(o)
+}
+```
+
+- instanceof
+
+- isPrototypeOf
+
+- Object.prototype.toString
+```
+function isArray(o) {
+  return Object.prototype.toString.call(o) === '[object Array]'
+}
+```
    
 ## 分片操作
 
@@ -412,3 +471,80 @@ function equal(a,b){
 console.log(equal(0.1 + 0.2, 0.3))
 ```
 
+## 跨域解决方案
+
+### jsonp：JSON with Padding
+
+- <script> 标签没有同域限制
+- 服务端返回页面上 callback 包裹的 json 数据
+
+### CORS：Cross-origin resource sharing 跨域资源共享
+
+### postMessage
+
+跨窗口，跨框架frame、iframe，跨域
+
+### Websocket
+
+### 代理服务器转发
+
+### document.domain
+
+- 主域名相同，子域名不同
+- 设置值为 主域名
+
+### iframe
+
+- window.name
+- location.hash 加载跨域页，参数跟在 # 后
+
+
+
+## 性能优化
+
+### 衡量性能的时间点
+
+- 首字节时间：收到服务器返回第一个字节的时间。反映网络后端的整体响应耗时
+- 白屏时间：第一个元素显示时间
+- 首屏时间：第一屏所有资源完整显示时间。SEO 指标，百度建议2秒内为宜，不超过3秒
+
+### 测量性能的工具
+
+- Performance：通过录制页面加载过程，可以获得加载，脚本执行，渲染，布局等时间分布情况
+
+- Lighthouse：可以分别模拟移动端和电脑端打开 URL，从性能、可访问性、最佳实践（安全、用户体验、函数是否符合标准等）、SEO 、单页应用等角度，获得修改建议
+
+
+### 性能优化方法
+
+- 预加载
+  - prefetch：<link rel="prefetch" href=" " />
+  - Image / Audio
+
+- 懒加载
+  - 图片懒加载
+  - DOM懒加载
+
+- 渲染
+  - 减少重排、重绘
+  - 节流、防抖
+
+- 缓存
+  - 离线缓存
+  - HTTP 缓存
+
+-图片
+  - 合并图片请求
+    - Base64 将图片嵌入 CSS
+    - SVG sprites
+  - 响应式图片：不同分辨率和 DPR 下显示不同图片
+    - 媒体查询
+    - IMG 的 srcset 属性
+  - 图片压缩
+    - image-webpack-loader、imagemin-webpack-plugin 工程化压缩图片工具
+    - WEBP 和 AVIF 图片格式
+
+- HTTP
+  - 使用 HTTP2 / HTTP3
+  - 使用 CDN
+  - 使用 gzip / br 压缩静态资源
