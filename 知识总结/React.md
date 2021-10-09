@@ -1,6 +1,56 @@
-# 目录
+- [React](#react)
+  - [开始](#开始)
+    - [无状态组件 与 有状态组件 的区别](#无状态组件-与-有状态组件-的区别)
+      - [props 与 state 的区别](#props-与-state-的区别)
+    - [npx 与 npm 的区别](#npx-与-npm-的区别)
+      - [npm (Node Package Manager)](#npm-node-package-manager)
+      - [npx (Node Package eXecute)](#npx-node-package-execute)
+  - [React 的特点](#react-的特点)
+  - [JSX](#jsx)
+  - [虚拟 DOM](#虚拟-dom)
+    - [虚拟 DOM 原理](#虚拟-dom-原理)
+    - [虚拟 DOM 优缺点](#虚拟-dom-优缺点)
+    - [Diffing 算法](#diffing-算法)
+      - [Key](#key)
+  - [生命周期](#生命周期)
+      - [组件生命周期的执行顺序](#组件生命周期的执行顺序)
+  - [组件](#组件)
+    - [函数组件与类组件](#函数组件与类组件)
+      - [区别](#区别)
+  - [Hook](#hook)
+    - [setState()](#setstate)
+    - [useState()](#usestate)
+    - [useEffect()](#useeffect)
+      - [参数](#参数)
+      - [常见用途：](#常见用途)
+      - [返回值](#返回值)
+    - [useContext()](#usecontext)
+    - [useRef()](#useref)
+  - [受控组件 与 非受控组件](#受控组件-与-非受控组件)
+  - [Fragments `<> </>`](#fragments--)
+  - [错误边界 Error Boundaries](#错误边界-error-boundaries)
+  - [React 中有哪几种类型的组件](#react-中有哪几种类型的组件)
+  - [react-router-dom](#react-router-dom)
+    - [原理](#原理)
+      - [路由匹配原理](#路由匹配原理)
+      - [动态路由](#动态路由)
+    - [组件](#组件-1)
+      - [路由组件](#路由组件)
+      - [路由匹配组件](#路由匹配组件)
+      - [导航组件](#导航组件)
+      - [其他组件](#其他组件)
+    - [相关 hook](#相关-hook)
+  - [Redux](#redux)
+    - [Store](#store)
+    - [State](#state)
+    - [Action](#action)
+    - [Reducer](#reducer)
+    - [middleware](#middleware)
+    - [React-Redux](#react-redux)
+      - [connect()](#connect)
+      - [<Provider> 组件](#provider-组件)
 
-# 正文
+# React
 
 ## 开始
 
@@ -244,15 +294,6 @@ useEffect() 允许返回一个函数，用于在组件卸载时清除副效应
   - 高阶组件的另一种形式
   - 将组件本身，通过 props.children 或 prop 属性 传递给子组件
   - 适合不能确定或不关心传给子组件数据的场景，如路由，加载组件的实现
-
-
-
-
-
-
-
-
-
 
 
 
