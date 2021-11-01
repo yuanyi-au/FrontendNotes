@@ -157,4 +157,4 @@ http 1.1 出现的 header 信息
 
 [浅谈http中的Cache-Control](https://blog.csdn.net/u012375924/article/details/82806617)
 
-[实践这一次，彻底搞懂浏览器缓存机制](https://segmentfault.com/a/1190000017962411) 这篇有些地方和我看到的其他文章有矛盾，之后有时间写一下
+[实践这一次，彻底搞懂浏览器缓存机制](https://segmentfault.com/a/1190000017962411)

@@ -1,20 +1,18 @@
-- [类型转换](#类型转换)
-  - [转换结果](#转换结果)
-    - [原始值转布尔](#原始值转布尔)
-    - [原始值转数字](#原始值转数字)
-    - [对象转布尔值](#对象转布尔值)
-    - [对象转字符串和数字](#对象转字符串和数字)
-  - [转换方法](#转换方法)
-    - [ToPrimitive() 方法](#toprimitive-方法)
-    - [JSON.stringify()](#jsonstringify)
-    - [typeof属性](#typeof属性)
-  - [实例](#实例)
+- [转换结果](#转换结果)
+  - [原始值转布尔](#原始值转布尔)
+  - [原始值转数字](#原始值转数字)
+  - [对象转布尔值](#对象转布尔值)
+  - [对象转字符串和数字](#对象转字符串和数字)
+- [转换方法](#转换方法)
+  - [ToPrimitive() 方法](#toprimitive-方法)
+  - [JSON.stringify()](#jsonstringify)
+  - [typeof属性](#typeof属性)
+- [实例](#实例)
 
-# 类型转换
 
-## 转换结果
+# 转换结果
 
-### 原始值转布尔
+## 原始值转布尔
 
 ```
 console.log(Boolean()); // false
@@ -23,7 +21,7 @@ console.log(Boolean(undefined)); // false
 console.log(Boolean(null)); // false
 ```
 
-### 原始值转数字
+## 原始值转数字
 
 ```
 console.log(Number(undefined)); // NaN
@@ -33,11 +31,11 @@ console.log(Number("3 abc")); // NaN
 console.log(parseInt("3 abc")) // 3
 ```
 
-### 对象转布尔值
+## 对象转布尔值
 
 所有对象都转换为true
 
-### 对象转字符串和数字
+## 对象转字符串和数字
 
 ```
 console.log([1, 2, 3].toString()); // 1,2,3
@@ -46,9 +44,9 @@ console.log([].toString()); // ""
 console.log((new Date(2010, 0, 1)).toString()); // Fri Jan 01 2010 00:00:00 GMT+0800 (CST)
 ```
 
-## 转换方法
+# 转换方法
 
-### ToPrimitive() 方法
+## ToPrimitive() 方法
 
 `ToPrimitive(input, PreferredType)`
 
@@ -59,18 +57,18 @@ console.log((new Date(2010, 0, 1)).toString()); // Fri Jan 01 2010 00:00:00 GMT+
 - 根据需要转换的类型先后调用 valueOf() 和 toString()
 - 都不成功则报错
 
-### JSON.stringify()
+## JSON.stringify()
 
 将 JavaScript 值转换为 JSON 字符串
 
-### typeof属性
+## typeof属性
 
 typeof NaN; //"number"
 
 注意：NaN 是唯一一个非自反的值 NaN===NaN; //false
 
 
-## 实例
+# 实例
 
 ```
 typeof [{x:1}] //
